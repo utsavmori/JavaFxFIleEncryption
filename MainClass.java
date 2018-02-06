@@ -26,6 +26,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
 
 public class MainClass extends Application { 
+	 public static void main(String args[]){          
+	      launch(args);     
+	   }  
 
 @Override     
    public void start(Stage primaryStage) throws Exception {     
@@ -214,9 +217,7 @@ public class MainClass extends Application {
       //Displaying the contents of the stage 
       primaryStage.show(); 
    }    
-   public static void main(String args[]){          
-      launch(args);     
-   }  
+  
    public static String GenerateMD5(String passwd) throws NoSuchAlgorithmException{
 	 if(passwd.equals("")) {return passwd;};
 	   MessageDigest md = MessageDigest.getInstance("MD5");
@@ -234,7 +235,11 @@ public class MainClass extends Application {
 
 		    for (int i = 0; i < listOfFiles.length; i++) {
 		      if (listOfFiles[i].isFile()) {
+		    	  
 		        String fname=listOfFiles[i].getName();
+		        if(fname.equals("FileEncrypter.jar")) {
+		        	continue;
+		        }
 		        if(fname.toCharArray()[0]=='.') {
 		        	continue;
 		        }
@@ -268,7 +273,7 @@ public class MainClass extends Application {
 	   BufferedReader br = new BufferedReader(new FileReader(hshfile));
 	   String hashtocompare=br.readLine();
 	   br.close();
-	   hshfile.delete();
+	   
 	   if(hashtocompare.equals(hashed_passwd)) {
 		   
 		   File folder = new File(System.getProperty("user.dir"));
@@ -277,10 +282,13 @@ public class MainClass extends Application {
 			    for (int i = 0; i < listOfFiles.length; i++) {
 			      if (listOfFiles[i].isFile()) {
 			        String fname=listOfFiles[i].getName();
+			        if(fname.equals("FileEncrypter.jar")) {
+			        	continue;
+			        }
 			        if(fname.toCharArray()[0]=='.') {
 			        	continue;
 			        }
-			       System.out.println(fname);
+			       
 			        String[] temp=fname.split("\\.");
 			       
 			        String newfname="";
@@ -291,7 +299,7 @@ public class MainClass extends Application {
 			        	newfname+="."+temp[j];	
 			        	}		        	
 			        }
-			        System.out.println(newfname);
+			        
 			        File inputFile = new File(fname);
 			    	File encryptedFile = new File(newfname);
 			    	Aes.fileProcessor(Cipher.DECRYPT_MODE,hashed_passwd,inputFile,encryptedFile);
@@ -301,6 +309,10 @@ public class MainClass extends Application {
 			    
 		   
 	   }
+	   else {
+		   return false;
+	   }
+	   hshfile.delete();
 	   }
 	  
 		 return true;
